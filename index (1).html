@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceramic Tile Inventory Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>📦 Ceramic Tile Inventory Dashboard</h1>
+                <p class="subtitle">Real-time Material Tracking & Forecasting</p>
+            </div>
+            <div class="header-right">
+                <div class="schedule-control">
+                    <label for="schedule">Production Schedule:</label>
+                    <select id="schedule">
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+                <div class="alert-container">
+                    <button id="alertBtn" class="alert-btn">
+                        🔔 <span id="alertCount" class="alert-badge">0</span>
+                    </button>
+                    <div id="alertPanel" class="alert-panel hidden">
+                        <div class="alert-panel-header">Active Alerts</div>
+                        <div id="alertList" class="alert-list"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-material="clay">Clay</button>
+            <button class="tab-btn" data-material="feldspar">Feldspar</button>
+            <button class="tab-btn" data-material="silica">Silica Sand</button>
+            <button class="tab-btn" data-material="kaolin">Kaolin</button>
+            <button class="tab-btn" data-material="talc">Talc</button>
+        </div>
+
+        <!-- Material Cards -->
+        <div class="materials-grid">
+            <!-- Clay Card -->
+            <div class="material-card active" data-material="clay">
+                <div class="card-header">
+                    <h2>Clay</h2>
+                    <div id="clay-status" class="status-indicator"></div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-label">Current Inventory</span>
+                        <span class="metric-value" id="clay-current">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Safety Threshold</span>
+                        <span class="metric-value" id="clay-threshold">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Age</span>
+                        <span class="metric-value" id="clay-age">0</span>
+                        <span class="metric-unit">days</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Cost/Ton</span>
+                        <span class="metric-value" id="clay-cost">$0</span>
+                        <span class="metric-unit"></span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>30-Day Inventory Projection</h3>
+                    <canvas id="clay-chart"></canvas>
+                </div>
+
+                <div class="orders-container">
+                    <h3>Purchase Orders</h3>
+                    <div id="clay-orders"></div>
+                </div>
+            </div>
+
+            <!-- Feldspar Card -->
+            <div class="material-card" data-material="feldspar">
+                <div class="card-header">
+                    <h2>Feldspar</h2>
+                    <div id="feldspar-status" class="status-indicator"></div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-label">Current Inventory</span>
+                        <span class="metric-value" id="feldspar-current">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Safety Threshold</span>
+                        <span class="metric-value" id="feldspar-threshold">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Age</span>
+                        <span class="metric-value" id="feldspar-age">0</span>
+                        <span class="metric-unit">days</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Cost/Ton</span>
+                        <span class="metric-value" id="feldspar-cost">$0</span>
+                        <span class="metric-unit"></span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>30-Day Inventory Projection</h3>
+                    <canvas id="feldspar-chart"></canvas>
+                </div>
+
+                <div class="orders-container">
+                    <h3>Purchase Orders</h3>
+                    <div id="feldspar-orders"></div>
+                </div>
+            </div>
+
+            <!-- Silica Sand Card -->
+            <div class="material-card" data-material="silica">
+                <div class="card-header">
+                    <h2>Silica Sand</h2>
+                    <div id="silica-status" class="status-indicator"></div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-label">Current Inventory</span>
+                        <span class="metric-value" id="silica-current">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Safety Threshold</span>
+                        <span class="metric-value" id="silica-threshold">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Age</span>
+                        <span class="metric-value" id="silica-age">0</span>
+                        <span class="metric-unit">days</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Cost/Ton</span>
+                        <span class="metric-value" id="silica-cost">$0</span>
+                        <span class="metric-unit"></span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>30-Day Inventory Projection</h3>
+                    <canvas id="silica-chart"></canvas>
+                </div>
+
+                <div class="orders-container">
+                    <h3>Purchase Orders</h3>
+                    <div id="silica-orders"></div>
+                </div>
+            </div>
+
+            <!-- Kaolin Card -->
+            <div class="material-card" data-material="kaolin">
+                <div class="card-header">
+                    <h2>Kaolin</h2>
+                    <div id="kaolin-status" class="status-indicator"></div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-label">Current Inventory</span>
+                        <span class="metric-value" id="kaolin-current">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Safety Threshold</span>
+                        <span class="metric-value" id="kaolin-threshold">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Age</span>
+                        <span class="metric-value" id="kaolin-age">0</span>
+                        <span class="metric-unit">days</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Cost/Ton</span>
+                        <span class="metric-value" id="kaolin-cost">$0</span>
+                        <span class="metric-unit"></span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>30-Day Inventory Projection</h3>
+                    <canvas id="kaolin-chart"></canvas>
+                </div>
+
+                <div class="orders-container">
+                    <h3>Purchase Orders</h3>
+                    <div id="kaolin-orders"></div>
+                </div>
+            </div>
+
+            <!-- Talc Card -->
+            <div class="material-card" data-material="talc">
+                <div class="card-header">
+                    <h2>Talc</h2>
+                    <div id="talc-status" class="status-indicator"></div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-label">Current Inventory</span>
+                        <span class="metric-value" id="talc-current">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Safety Threshold</span>
+                        <span class="metric-value" id="talc-threshold">0</span>
+                        <span class="metric-unit">tons</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Age</span>
+                        <span class="metric-value" id="talc-age">0</span>
+                        <span class="metric-unit">days</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Storage Cost/Ton</span>
+                        <span class="metric-value" id="talc-cost">$0</span>
+                        <span class="metric-unit"></span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>30-Day Inventory Projection</h3>
+                    <canvas id="talc-chart"></canvas>
+                </div>
+
+                <div class="orders-container">
+                    <h3>Purchase Orders</h3>
+                    <div id="talc-orders"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
