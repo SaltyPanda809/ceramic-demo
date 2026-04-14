@@ -1,86 +1,63 @@
-// Fixed script.js code to properly destroy and reinitialize Chart.js instances when tabs are switched
+// Complete Ceramic Tile Inventory Dashboard Code
 
-// Function to create a new Chart instance
-function createChart(ctx, data) {
-    return new Chart(ctx, {
+// Data structure for materials
+const materials = [
+    { name: 'Glossy White', size: '12x12', quantity: 100, price: 3.50 },
+    { name: 'Matte Black', size: '12x24', quantity: 50, price: 4.00 },
+    { name: 'Textured Grey', size: '24x24', quantity: 30, price: 5.00 },
+    { name: 'Vibrant Blue', size: '12x12', quantity: 200, price: 4.50 },
+    // Add more materials as needed
+];
+
+// Tab switching functionality
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+        document.querySelector('.active').classList.remove('active');
+        this.classList.add('active');
+        const currentTabContent = document.querySelector(`.${this.dataset.tab}`);
+        document.querySelector('.tab-content.active').classList.remove('active');
+        currentTabContent.classList.add('active');
+    });
+});
+
+// Function to initialize charts (using Chart.js)
+function initializeCharts() {
+    const ctx = document.getElementById('materialChart').getContext('2d');
+    const chart = new Chart(ctx, {
         type: 'bar',
-        data: data,
+        data: {
+            labels: materials.map(mat => mat.name),
+            datasets: [{
+                label: 'Quantity',
+                data: materials.map(mat => mat.quantity),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            }
         }
     });
 }
 
-// Function to destroy chart instances
-function destroyChart(chart) {
-    if (chart) {
-        chart.destroy();
-    }
+// Function to update charts
+function updateCharts() {
+    // Logic to update the chart data based on the materials
+    // For example, you can refresh with new data from an API or user input.
 }
 
-// Initialize charts when the page is loaded
-let myChart;
+// Alert system
+function showAlert(message) {
+    alert(message);
+}
 
-window.onload = function() {
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const data = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    };
-    myChart = createChart(ctx, data);
-};
-
-// Event listener for tab switching
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-        const tabId = this.getAttribute('data-tab');
-        // Destroy the existing chart instance
-        destroyChart(myChart);
-        // Update the chart with new data based on the selected tab
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const newData = getDataForTab(tabId); // Function to get data for the chart based on the tab
-        myChart = createChart(ctx, newData);
-    });
+// Initialize the charts when the document is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initializeCharts();
 });
 
-// Function to get data for selected tab
-function getDataForTab(tabId) {
-    // Sample data retrieval based on tabId
-    // Replace with actual data fetching logic
-    const sampleData = {
-        'tab1': [10, 15, 20, 25, 30],
-        'tab2': [12, 18, 29, 5, 7],
-        'tab3': [14, 11, 9, 18, 16]
-    };
-    return {
-        labels: ['A', 'B', 'C', 'D', 'E'],
-        datasets: [{
-            label: 'Votes',
-            data: sampleData[tabId],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    };
-}
+// Make sure to handle any updates as needed or new material addition functionality.
